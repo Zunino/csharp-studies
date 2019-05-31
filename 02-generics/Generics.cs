@@ -71,6 +71,16 @@ namespace DotnetStudies {
             Console.WriteLine(String.Join(" ", countries));
         }
 
+        private static void PlayWithADictionaryOfStrings() {
+            IDictionary<String, String> contacts = new Dictionary<String, String>();
+            contacts.Add("Andre Zunino", "neyzunino@gmail.com");
+            contacts.Add("John Marston", "jmarston@rockstar.net");
+            contacts.Add("Bonnie McFarlane", "bmacfarlane@rockstar.net");
+            foreach (KeyValuePair<String, String> entry in contacts) {
+                Console.WriteLine("{0}: <{1}>", entry.Key, entry.Value);
+            }
+        }
+
         static void Main(string[] args) {
             PlayWithAList();
             PrintSeparator();
@@ -81,6 +91,8 @@ namespace DotnetStudies {
             PlayWithGenericMethodsAndAListOfInt();
             PrintSeparator();
             PlayWithGenericMethodsAndAListOfString();
+            PrintSeparator();
+            PlayWithADictionaryOfStrings();
         }
 
     }
