@@ -7,24 +7,56 @@ using System.Collections.Generic;
 namespace DotnetStudies
 {
 
+    enum TaskType
+    {
+        DUMMY,
+        HTTP_REQUESTS
+    }
+
     class Async
     {
         static void Main(string[] args)
         {
             bool runAsynchronously = false;
-            if (args.Length == 1 && args[0] == "async")
+            TaskType type = TaskType.DUMMY;
+
+            if (args.Length >= 1)
             {
-                runAsynchronously = true;
+                if (args[0] == "http")
+                {
+                    type = TaskType.HTTP_REQUESTS;
+                }
+                if (args.Length == 2 && args[1] == "async")
+                {
+                    runAsynchronously = true;
+                }
             }
-            if (!runAsynchronously)
+
+            if (type == TaskType.DUMMY)
             {
-                Console.WriteLine("== [SYNCHRONOUS MODE] ==");
-                HttpRequests.MakeSynchronousRequests();
-            } 
-            else
+                if (!runAsynchronously)
+                {
+                    Console.WriteLine("== [DUMMY SYNC] ==");
+                    DummyTasks.DoSynchronousTasks();
+                }
+                else
+                {
+                    Console.WriteLine("== [DUMMY ASYNC] ==");
+                    DummyTasks.DoAsynchronousTasks();
+                }
+            }
+            else if (type == TaskType.HTTP_REQUESTS)
             {
-                Console.WriteLine("== [ASYNCHRONOUS MODE] ==");
-                HttpRequests.MakeAsynchronousRequests();
+                if (!runAsynchronously)
+                {
+                    Console.WriteLine("== [HTTP SYNC] ==");
+                    HttpRequests.MakeSynchronousRequests();
+                } 
+                else
+                {
+                    Console.WriteLine("== [HTTP ASYNC] ==");
+                    HttpRequests.MakeAsynchronousRequests();
+                }
             }
         }
     }

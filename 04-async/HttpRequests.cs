@@ -15,18 +15,20 @@ namespace DotnetStudies
 
         const int NO_OF_REQUESTS = 3;
 
-        static WebResponse GetUrl(string url)
+        static WebResponse GetUrl(string requestId, string url)
         {
             WebRequest request = WebRequest.Create(url);
+            Console.WriteLine("==> Request {0}", requestId);
             Console.Write("GETting {0}...", url);
             HttpWebResponse response = (HttpWebResponse) request.GetResponse();
             Console.WriteLine(" {0}", response.StatusCode);
             return response;
         }
 
-        static async Task<WebResponse> GetUrlAsync(string url)
+        static async Task<WebResponse> GetUrlAsync(string requestId, string url)
         {
             WebRequest request = WebRequest.Create(url);
+            Console.WriteLine("==> Request {0}", requestId);
             Console.WriteLine("GETting {0}...", url);
             return await request.GetResponseAsync();
         }
@@ -43,26 +45,23 @@ namespace DotnetStudies
 
         internal static void MakeSynchronousRequests()
         {
-            Console.WriteLine("==> Request 1");
-            string body1 = GetBody(GetUrl(BEECEPTOR_URL_1));
+            string body1 = GetBody(GetUrl("FOO", BEECEPTOR_URL_1));
             Console.WriteLine("Response 1: {0}", body1);
 
-            Console.WriteLine("==> Request 2");
-            string body2 = GetBody(GetUrl(BEECEPTOR_URL_2));
+            string body2 = GetBody(GetUrl("BAR", BEECEPTOR_URL_2));
             Console.WriteLine("Response 2: {0}", body2);
 
-            Console.WriteLine("==> Request 3");
-            string body3 = GetBody(GetUrl(BEECEPTOR_URL_3));
+            string body3 = GetBody(GetUrl("BAZ", BEECEPTOR_URL_3));
             Console.WriteLine("Response 3: {0}", body3);
         }
 
-        internal static async void MakeAsynchronousRequests()
+        internal static void MakeAsynchronousRequests()
         {
             var tasks = new List<Task<WebResponse>>
             {
-                GetUrlAsync(BEECEPTOR_URL_1),
-                GetUrlAsync(BEECEPTOR_URL_2),
-                GetUrlAsync(BEECEPTOR_URL_3)
+                GetUrlAsync("FOO", BEECEPTOR_URL_1),
+                GetUrlAsync("BAR", BEECEPTOR_URL_2),
+                GetUrlAsync("BAZ", BEECEPTOR_URL_3)
             };
             for (int i = 0; i < NO_OF_REQUESTS; ++i)
             {
@@ -71,7 +70,7 @@ namespace DotnetStudies
                 tasks.RemoveAt(taskIdx);
                 try
                 {
-                    WebResponse response = await task;
+                    WebResponse response = task.Result;
                     string body = GetBody(response);
                     Console.WriteLine("Asynchronous response: {0}", body);
                 }
