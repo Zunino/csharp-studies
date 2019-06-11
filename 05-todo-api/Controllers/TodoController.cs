@@ -9,7 +9,7 @@ namespace DotnetStudies.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TodoController
+    public class TodoController : ControllerBase
     {
         private readonly TodoContext context;
 
@@ -36,10 +36,18 @@ namespace DotnetStudies.Controllers
 
             if (todoItem == null)
             {
-                return new NotFoundResult();
+                return NotFound();
             }
 
             return todoItem;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem item)
+        {
+            context.TodoItems.Add(item);
+            await context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetTodoItem), new {id = item.Id}, item);
         }
     }
 }

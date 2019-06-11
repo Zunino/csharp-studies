@@ -7,6 +7,12 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+/**
+ * https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-2.2&tabs=visual-studio-code
+ *
+ * Andre Zunino <ney.zunino@softplan.com.br>
+ * 11 June 2019
+ */
 
 namespace DotnetStudies
 {
