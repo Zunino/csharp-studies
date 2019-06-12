@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -59,6 +60,22 @@ namespace DotnetStudies.Controllers
             }
 
             context.Entry(item).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTodoItem(long id)
+        {
+            var item = await context.TodoItems.FindAsync(id);
+            
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            context.TodoItems.Remove(item);
             await context.SaveChangesAsync();
 
             return NoContent();
