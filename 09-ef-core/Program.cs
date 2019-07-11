@@ -6,9 +6,11 @@
  *
  * Andre Zunino <neyzunino@gmail.com>
  * 10 July 2019
+ * Modified 11 July 2019
  */
 
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace _09_ef_core
 {
@@ -84,7 +86,9 @@ namespace _09_ef_core
         {
             using (var db = new GamesDbContext())
             {
-                foreach (var publisher in db.Publishers)
+                var publishers = db.Publishers
+                    .Include(publisher => publisher.Games);
+                foreach (var publisher in publishers)
                 {
                     Console.WriteLine("Publisher [ID: {0}]: {1} ({2})", publisher.PublisherId, publisher.Name, publisher.Country);
                     var games = publisher.Games;
