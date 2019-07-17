@@ -6,15 +6,17 @@
  *
  * Andre Zunino <neyzunino@gmail.com>
  * 10 July 2019
- * Modified 11 July 2019
+ * Modified 12 July 2019
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace _09_ef_core
 {
-    class Program
+    internal static class Program
     {
         static void InsertData()
         {
@@ -82,15 +84,23 @@ namespace _09_ef_core
             }
         }
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             using (var db = new GamesDbContext())
             {
                 var publishers = db.Publishers
-                    .Include(publisher => publisher.Games);
+                    .Select(publisher => new
+                    {
+                        publisher,
+                        Games = publisher.Games.Where(game => game.Year >= 2013)
+                    })
+                    .AsEnumerable()
+                    .Select(p => p.publisher)
+                    .ToList();
+                
                 foreach (var publisher in publishers)
                 {
-                    Console.WriteLine("Publisher [ID: {0}]: {1} ({2})", publisher.PublisherId, publisher.Name, publisher.Country);
+                    Console.WriteLine("Publisher [ID: {0}]: {1} ({2})", publisher., publisher.Name, publisher.Country);
                     var games = publisher.Games;
                     if (games.Count == 0)
                     {
