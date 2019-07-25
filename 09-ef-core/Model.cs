@@ -32,6 +32,7 @@ namespace _09_ef_core
 
     public class Game
     {
+        public int Id { get; set; }
         public string Title { get; set; }
         public int Year { get; set; }
         public Publisher Publisher { get; set; }
@@ -43,8 +44,9 @@ namespace _09_ef_core
         {
             Games = new List<Game>();
         }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Country { get; set; }
-        public ICollection<Game> Games { get; set; }
+        public ICollection<Game> Games { get; }
     }
 }

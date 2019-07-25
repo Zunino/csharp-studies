@@ -86,21 +86,22 @@ namespace _09_ef_core
 
         private static void Main(string[] args)
         {
+            //InsertData();
             using (var db = new GamesDbContext())
             {
                 var publishers = db.Publishers
-                    .Select(publisher => new
+                    .Select(p => new
                     {
-                        publisher,
-                        Games = publisher.Games.Where(game => game.Year >= 2013)
+                        Id = p.Id,
+                        Name = p.Name,
+                        Country = p.Country,
+                        Games = p.Games.Where(g => g.Year == 2005).ToList()
                     })
-                    .AsEnumerable()
-                    .Select(p => p.publisher)
                     .ToList();
                 
                 foreach (var publisher in publishers)
                 {
-                    Console.WriteLine("Publisher [ID: {0}]: {1} ({2})", publisher., publisher.Name, publisher.Country);
+                    Console.WriteLine($"Publisher [ID: {publisher.Id}]: {publisher.Name} ({publisher.Country})");
                     var games = publisher.Games;
                     if (games.Count == 0)
                     {
