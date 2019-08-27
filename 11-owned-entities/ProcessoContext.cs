@@ -13,14 +13,15 @@ namespace _11_owned_entities
             = new LoggerFactory(new[] {new ConsoleLoggerProvider((_, __) => true, true)});
         
         public DbSet<Processo> Processos { get; set; }
-        public DbSet<DataReferencia> Datas { get; set; }
         public DbSet<Parte> Partes { get; set; }
+        public DbSet<Fila> Filas { get; set; }
+        public DbSet<ObjetoFila> ObjetoFilas { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
                 .UseSqlite("Data Source=processos.db")
-                ;//.UseLoggerFactory(MyLoggerFactory);
+                .UseLoggerFactory(MyLoggerFactory);
         }
     }
     

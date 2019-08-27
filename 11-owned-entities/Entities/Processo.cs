@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace _11_owned_entities.Entities
@@ -6,7 +7,8 @@ namespace _11_owned_entities.Entities
     {
         public int Id { get; set; }
         public string Descricao { get; set; }
+
         public ICollection<Parte> Partes { get; set; }
-        public DataReferencia Data { get; set; }
+        public ICollection<ObjetoFila> ObjetoFilas { get; set; }
     }
 }
