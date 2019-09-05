@@ -53,14 +53,32 @@ namespace _15_linq
             IEnumerable<Game> games = new List<Game>
             {
                 new Game { Title = "Red Dead Redemption", Year = 2010, MinAge = 18 },
+                new Game { Title = "Witcher 3", Year = 2015, MinAge = 18 },
                 new Game { Title = "The Last of Us", Year = 2013, MinAge = 18 },
                 new Game { Title = "Ratchet and Clank", Year = 2009, MinAge = 10 },
-                new Game { Title = "Uncharted: Drake's Fortune", Year = 2008, MinAge = 14 }
+                new Game { Title = "Uncharted: Drake's Fortune", Year = 2008, MinAge = 14 },
+                new Game { Title = "Call of Duty: Modern Warfare", Year = 2009, MinAge = 16 },
+                new Game { Title = "Minecraft", Year = 2016, MinAge = 10 },
+                new Game { Title = "Fallout 4", Year = 2015, MinAge = 18 }
             };
 
-            var kidsGames = from game in games where game.MinAge <= 10 select game;
-            var teenGames = from game in games where game.MinAge <= 16 select game;
-            var adultGames = from game in games where game.MinAge > 16 select game;
+            var kidsGames =
+                from game in games
+                where game.MinAge <= 10
+                orderby game.Year
+                select game;
+
+            var teenGames =
+                from game in games
+                where game.MinAge > 10 && game.MinAge <= 16
+                orderby game.Year
+                select game;
+
+            var adultGames =
+                from game in games
+                where game.MinAge > 16
+                orderby game.Year
+                select game;
 
             Print(kidsGames, "Kids Games");
             Print(teenGames, "Teen Games");
