@@ -74,11 +74,10 @@ namespace _15_linq
                 orderby game.Year
                 select game;
 
-            var adultGames =
-                from game in games
-                where game.MinAge > 16
-                orderby game.Year
-                select game;
+            // Using method syntax
+            var adultGames = games
+                .Where(game => game.MinAge > 16)
+                .OrderBy(game => game.Year);
 
             Print(kidsGames, "Kids Games");
             Print(teenGames, "Teen Games");
