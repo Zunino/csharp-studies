@@ -24,12 +24,14 @@ namespace DotnetStudies.Controllers
             context.SaveChanges();
         }
 
+        // GET api/todo
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         {
             return await context.TodoItems.ToListAsync();
         }
 
-        // E.g. GET api/Todo/5
+        // GET api/todo/<n>
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoItem>> GetTodoItem(long id)
         {
