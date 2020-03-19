@@ -42,6 +42,7 @@ namespace _13_newtonsoft_json
             var rdr2 = new Game("Red Dead Redemption 2", 2018, rockstar);
 
             // Using JsonSerializer directly
+            /*
             var serializer = new JsonSerializer();
             serializer.Converters.Add(new StringEnumConverter());
             serializer.NullValueHandling = NullValueHandling.Ignore;
@@ -54,6 +55,7 @@ namespace _13_newtonsoft_json
             writer = new StringWriter();
             serializer.Serialize(writer, rdr2);
             Console.WriteLine($"RDR2: {writer.ToString()}");
+            */
 
             // Serialization using JsonConvert (wrapper around JsonSerializer)
             Console.WriteLine($"Rockstar: {JsonConvert.SerializeObject(rockstar, jsonSettings)}");
@@ -70,7 +72,9 @@ namespace _13_newtonsoft_json
 
         static void Main(string[] args)
         {
-            //GamesExample();
+            Console.WriteLine("=== Games");
+            GamesExample();
+            Console.WriteLine("=== Sample GraphQL");
             GraphQLExample();
         }
     }

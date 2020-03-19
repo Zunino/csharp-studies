@@ -21,7 +21,7 @@ namespace _12_val_ref_semantics
 
         private static void Trace<T>(string message, T value)
         {
-            if (value != default)
+            if (value != null)
             {
                 Console.WriteLine($"{message}: {value}");
             } else {
