@@ -2,7 +2,7 @@ using FluentMigrator;
 
 namespace _16_ef_core_3
 {
-    [Migration(202003242154)]
+    [Migration(202003251011)]
     public class AddTranscriptionTable : Migration
     {
         public override void Up()

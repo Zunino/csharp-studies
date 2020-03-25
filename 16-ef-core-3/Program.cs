@@ -28,16 +28,18 @@ namespace _16_ef_core_3
 
         private static void QueryVideos()
         {
-//            SetUpServices();
             using (var db = new VideoContext())
             {
-                // var videos = db.Videos.ToList();
-                // foreach (var v in videos)
-                // {
-                //     Console.WriteLine($"{v.Description}");
-                // }
-                var v1 = db.Videos.First();
-                Console.WriteLine(v1);
+                var videos = db.Videos.ToList();
+                foreach (var v in videos)
+                {
+                    Console.WriteLine($"{v.Description} [{v.Id}]");
+                    if (v.Transcription != null) {
+                        Console.WriteLine($"\tTranscription: \"{v.Transcription.Text}\"");
+                    } else {
+                        Console.WriteLine("\tTranscription: N/A");
+                    }
+                }
             }
         }
 

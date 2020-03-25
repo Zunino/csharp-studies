@@ -15,7 +15,7 @@ namespace _16_ef_core_3
                 tbuilder.WithOwner().HasForeignKey("VideoId");
                 tbuilder.Property("VideoId").HasColumnName("video_id").IsRequired();
                 tbuilder.Property("Text").HasColumnName("text").IsRequired();
-                tbuilder.ToTable("transcricoes");
+                tbuilder.ToTable("transcriptions");
             });
         }
     }
