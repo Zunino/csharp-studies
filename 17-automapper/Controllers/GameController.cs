@@ -47,5 +47,20 @@ namespace _17_automapper.Controllers
             var gameList = _mapper.Map<IEnumerable<GameViewModel>>(games);
             return gameList;
         }
+
+        [HttpGet("inverse")]
+        public Game GetSingleModel()
+        {
+            var gameViewModel = new GameViewModel
+            {
+                Id = 10,
+                Title = "Ratchet and Clank",
+                PubId = 5,
+                PubName = "Insomniac Games",
+                FullDesc = "Ratchet and Clank (Insomniac Games)"
+            };
+            var game = _mapper.Map<Game>(gameViewModel);
+            return game;
+        }
     }
 }
