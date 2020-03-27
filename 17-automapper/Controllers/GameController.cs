@@ -20,11 +20,11 @@ namespace _17_automapper.Controllers
         static GameController()
         {
             var rockstar = new Publisher { Id = 1, Name = "Rockstar Games" };
-            var naughtyDogg = new Publisher { Id = 2, Name = "Naughty Dogg" };
+            var naughtyDog = new Publisher { Id = 2, Name = "Naughty Dog" };
             games = new List<Game>
             {
                 new Game { Id = 1, Title = "Red Dead Redemption", Publisher = rockstar },
-                new Game { Id = 2, Title = "The Last of Us", Publisher = naughtyDogg },
+                new Game { Id = 2, Title = "The Last of Us", Publisher = naughtyDog },
                 new Game { Id = 3, Title = "Red Dead Redemption II", Publisher = rockstar }
             };
         }
@@ -44,15 +44,6 @@ namespace _17_automapper.Controllers
         [HttpGet("all")]
         public IEnumerable<GameViewModel> GetAll()
         {
-            var rockstar = new Publisher { Id = 1, Name = "Rockstar Games" };
-            var naughtyDogg = new Publisher { Id = 2, Name = "Naughty Dogg" };
-            var games = new List<Game>
-            {
-                new Game { Id = 1, Title = "Red Dead Redemption", Publisher = rockstar },
-                    new Game { Id = 2, Title = "The Last of Us", Publisher = naughtyDogg },
-                    new Game { Id = 3, Title = "Red Dead Redemption II", Publisher = rockstar }
-            };
-
             var gameList = _mapper.Map<IEnumerable<GameViewModel>>(games);
             return gameList;
         }
