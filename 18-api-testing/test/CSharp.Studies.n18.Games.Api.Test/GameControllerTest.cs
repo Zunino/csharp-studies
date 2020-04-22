@@ -26,13 +26,30 @@ namespace CSharp.Studies.n18.Games.Api.Test
         }
 
         [Fact]
-        public async Task Test()
+        public async Task ShouldBeAbleToGetAllGames()
         {
-            var response = await _httpClient.GetAsync("http://localhost:5000/game");
+            var response = await _httpClient.GetAsync("http://localhost:5000/games");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var content = await response.Content.ReadAsStringAsync();
             var games = JsonSerializer.Deserialize<IEnumerable<Game>>(content);
             games.Count().Should().Be(3);
+        }
+
+        [Fact]
+        public async Task ShouldBeAbleToGetASpecificGame()
+        {
+            var response = await _httpClient.GetAsync("http://localhost:5000/game/3");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            var content = await response.Content.ReadAsStringAsync();
+            var game = JsonSerializer.Deserialize<Game>(content);
+            game.Id.Should().Be(3);
+        }
+
+        [Fact]
+        public async Task ShouldReturnNotFoundWhenGameNotFound()
+        {
+            var response = await _httpClient.GetAsync("http://localhost:5000/game/999");
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }
 }

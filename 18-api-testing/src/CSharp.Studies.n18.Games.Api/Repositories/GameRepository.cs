@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CSharp.Studies.n18.Games.Models;
 
 namespace CSharp.Studies.n18.Games.Repositories
@@ -25,14 +26,14 @@ namespace CSharp.Studies.n18.Games.Repositories
                 }
             };
 
-        public IEnumerable<Game> FindAll()
+        public async Task<IEnumerable<Game>> FindAll()
         {
-            return _data;
+            return await Task.FromResult(_data);
         }
 
-        public Game FindById(int id)
+        public async Task<Game> FindById(int id)
         {
-            return _data.SingleOrDefault(g => g.Id == id);
+            return await Task.FromResult(_data.SingleOrDefault(g => g.Id == id));
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CSharp.Studies.n18.Games.Repositories;
 using CSharp.Studies.n18.Games.Models;
@@ -15,10 +16,21 @@ namespace CSharp.Studies.n18.Games.Controllers
             _gameRepository = gameRepository;
         }
 
-        [HttpGet]
-        public IEnumerable<Game> GetGames()
+        [HttpGet("/games")]
+        public async Task<IEnumerable<Game>> GetGames()
         {
-            return _gameRepository.FindAll();
+            return await _gameRepository.FindAll();
+        }
+
+        [HttpGet("/game/{id}")]
+        public async Task<IActionResult> GetGame(int id)
+        {
+            var game = await _gameRepository.FindById(id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+            return Ok(game);
         }
     }
 }
