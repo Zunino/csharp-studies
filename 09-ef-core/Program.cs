@@ -1,12 +1,24 @@
 ﻿/**
  * Based on https://docs.microsoft.com/en-us/ef/core/get-started/netcore/new-db-sqlite
  *
- * dotnet ef database drop
+ * Check if dotnet-ef is already installed
+ * dotnet tool list --global
+ *
+ * Install it, if needed
+ * dotnet tool install --global dotnet-ef
+ *
+ * Setup migrations
+ * dotnet ef migrations add InitialCreate
+ *
+ * Create database and apply migrations
  * dotnet ef database update
+ *
+ * Drop database
+ * dotnet ef database drop
  *
  * Andre Zunino <neyzunino@gmail.com>
  * 10 July 2019
- * Modified 12 July 2019
+ * Modified 21 February 2021
  */
 
 using System;
@@ -86,16 +98,21 @@ namespace _09_ef_core
 
         private static void Main(string[] args)
         {
-            //InsertData();
             using (var db = new GamesDbContext())
             {
+                if (db.Publishers.Count() == 0)
+                {
+                    Console.WriteLine("The database looks empty; inserting sample data...");
+                    InsertData();
+                }
+                Console.WriteLine("Listing games from 2010 on, by publisher:");
                 var publishers = db.Publishers
                     .Select(p => new
                     {
                         Id = p.Id,
                         Name = p.Name,
                         Country = p.Country,
-                        Games = p.Games.Where(g => g.Year == 2005).ToList()
+                        Games = p.Games.Where(g => g.Year >= 2010).ToList()
                     })
                     .ToList();
                 
