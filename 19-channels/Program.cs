@@ -18,13 +18,18 @@
  * 21 February 2021
  */
 
+using System;
+
 namespace _19_channels
 {
     class Program
     {
         static void Main(string[] args)
         {
-            BarebonesChannelSampler.TryItOut();
+            Console.WriteLine("== Homemade channel");
+            HomemadeChannelSampler.TryItOut();
+            Console.WriteLine("\n== Dotnet channel");
+            ProperChannelSampler.TryItOut();
         }
     }
 }

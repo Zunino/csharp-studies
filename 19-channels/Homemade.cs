@@ -1,7 +1,7 @@
 /**
  * HOMEMADE.CS
  * 
- * Barebones implementation of a "channel", based on the article at
+ * Homemade implementation of a "channel", based on the article at
  * https://devblogs.microsoft.com/dotnet/an-introduction-to-system-threading-channels/
  *
  * Andre Zunino <neyzunino@gmail.com>
@@ -16,7 +16,7 @@ using System.Collections.Concurrent;
 
 namespace _19_channels
 {
-    public interface IBareboneChannel<T>
+    public interface IHomemadeChannel<T>
     {
         void Write(T value);
         Task<T> ReadAsync();
@@ -24,7 +24,7 @@ namespace _19_channels
         bool IsOpen();
     }
 
-    public sealed class BareboneChannel<T> : IBareboneChannel<T>
+    public sealed class HomemadeChannel<T> : IHomemadeChannel<T>
     {
         public void Write(T value)
         {
@@ -34,7 +34,10 @@ namespace _19_channels
 
         public async Task<T> ReadAsync()
         {
-            await semaphore.WaitAsync(50);
+            // if no timeout is specified here, the semaphore might be waited on
+            // forever and the main thread will hang waiting for the consumer
+            // task to end
+            await semaphore.WaitAsync(1);
 
             // once the semaphore releases, we must be able to dequeue a value
             bool dequeueResult = queue.TryDequeue(out T value);
@@ -49,49 +52,58 @@ namespace _19_channels
 
         public void Close()
         {
-            Interlocked.Exchange(ref open, 0);
+            lock(this) {
+                open = false;
+            }
         }
 
         public bool IsOpen()
         {
-            // we might have finished putting values on the queue, but the channel
-            // should remain open until they've all been consumed
-            return open != 0;
+            bool isOpen;
+            lock(this) {
+                isOpen = this.open;
+            }
+            return isOpen;
         }
 
         private readonly ConcurrentQueue<T> queue = new ConcurrentQueue<T>();
         private readonly SemaphoreSlim semaphore = new SemaphoreSlim(0);
-        private int open = 1;
+        private bool open = true;
     }
 
-    internal sealed class BareboneStringProducer
+
+    internal sealed class HomemadeStringProducer
     {
-        internal BareboneStringProducer(IBareboneChannel<string> channel, int valueCount)
+        internal HomemadeStringProducer(IHomemadeChannel<string> channel, int valueCount)
         {
             this.channel = channel;
             this.valueCount = valueCount;
         }
-        internal void produceAsync()
+   
+        internal void produce()
         {
             for (int i = 0; i < valueCount; ++i)
             {
                 var value = $"value-{i}";
-                channel.Write(value);
                 Console.WriteLine($"[producer] Made {value}");
-                /* await Task.Delay(100); */
+                channel.Write(value);
+                Thread.Sleep(100);
             }
             channel.Close();
         }
-        private readonly IBareboneChannel<string> channel;
+       
+        private readonly IHomemadeChannel<string> channel;
         private int valueCount;
     }
 
-    internal sealed class BareboneStringConsumer
+   
+    internal sealed class HomemadeStringConsumer
     {
-        internal BareboneStringConsumer(IBareboneChannel<string> channel)
+        internal HomemadeStringConsumer(IHomemadeChannel<string> channel)
         {
             this.channel = channel;
         }
+       
         internal async Task consumeAsync()
         {
             while (channel.IsOpen())
@@ -102,19 +114,21 @@ namespace _19_channels
             }
             Console.WriteLine("[consumer] Channel was closed");
         }
-        private readonly IBareboneChannel<string> channel;
+       
+        private readonly IHomemadeChannel<string> channel;
     }
 
-    internal static class BarebonesChannelSampler
+
+    internal static class HomemadeChannelSampler
     {
         internal static void TryItOut()
         {
-            IBareboneChannel<string> strChannel = new BareboneChannel<string>();
+            IHomemadeChannel<string> strChannel = new HomemadeChannel<string>();
 
-            var producer = new BareboneStringProducer(strChannel, 10);
-            var consumer = new BareboneStringConsumer(strChannel);
+            var producer = new HomemadeStringProducer(strChannel, 10);
+            var consumer = new HomemadeStringConsumer(strChannel);
 
-            var producerTask = Task.Run(() => producer.produceAsync());
+            var producerTask = Task.Run(() => producer.produce());
             Task.WaitAll(producerTask, consumer.consumeAsync());
         }
     }
