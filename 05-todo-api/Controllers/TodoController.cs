@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using DotnetStudies.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DotnetStudies.Controllers
 {
@@ -12,30 +9,32 @@ namespace DotnetStudies.Controllers
     [ApiController]
     public class TodoController : ControllerBase
     {
-        private readonly TodoContext context;
+        private readonly ITodoService todoService;
 
-        public TodoController(TodoContext context)
+        public TodoController(TodoContext context, ITodoService todoService)
         {
-            this.context = context;
-
-            if (context.TodoItems.Any()) return;
-            
-            context.TodoItems.Add(new TodoItem {Name = "Item 1"});
-            context.SaveChanges();
+            this.todoService = todoService;
         }
 
         // GET api/todo
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         {
-            return await context.TodoItems.ToListAsync();
+            return Ok(await todoService.GetTodoItems());
+        }
+
+        // GET api/todo/pending
+        [HttpGet("pending")]
+        public async Task<ActionResult<IEnumerable<TodoItem>>> GetPendingTodoItems()
+        {
+            return Ok(await todoService.GetPendingTodoItems());
         }
 
         // GET api/todo/<n>
         [HttpGet("{id}")]
         public async Task<ActionResult<TodoItem>> GetTodoItem(long id)
         {
-            var todoItem = await context.TodoItems.FindAsync(id);
+            var todoItem = await todoService.GetTodoItem(id);
 
             if (todoItem == null)
             {
@@ -48,38 +47,28 @@ namespace DotnetStudies.Controllers
         [HttpPost]
         public async Task<ActionResult<TodoItem>> PostTodoItem(TodoItem item)
         {
-            context.TodoItems.Add(item);
-            await context.SaveChangesAsync();
+            await todoService.AddTodoItem(item);
             return CreatedAtAction(nameof(GetTodoItem), new {id = item.Id}, item);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(long id, TodoItem item)
-        {
-            if (id != item.Id)
-            {
-                return BadRequest();
-            }
+        /* [HttpPut("{id}")] */
+        /* public async Task<IActionResult> PutTodoItem(long id, TodoItem item) */
+        /* { */
+        /*     if (id != item.Id) */
+        /*     { */
+        /*         return BadRequest(); */
+        /*     } */
 
-            context.Entry(item).State = EntityState.Modified;
-            await context.SaveChangesAsync();
+        /*     context.Entry(item).State = EntityState.Modified; */
+        /*     await context.SaveChangesAsync(); */
 
-            return NoContent();
-        }
+        /*     return NoContent(); */
+        /* } */
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodoItem(long id)
         {
-            var item = await context.TodoItems.FindAsync(id);
-            
-            if (item == null)
-            {
-                return NotFound();
-            }
-
-            context.TodoItems.Remove(item);
-            await context.SaveChangesAsync();
-
+            await todoService.RemoveTodoItem(id);
             return NoContent();
         }
     }

@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-/**
+﻿/**
  * https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-2.2&tabs=visual-studio-code
  *
  * Andre Zunino <ney.zunino@softplan.com.br>
- * 11 June 2019
+ * Created 11 June 2019
+ * Updated 16 August 2021 (dotnet2.2 -> dotnet5)
  */
+
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 
 namespace DotnetStudies
 {
