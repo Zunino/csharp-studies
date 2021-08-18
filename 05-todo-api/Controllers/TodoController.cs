@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DotnetStudies.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace DotnetStudies.Controllers
 {
@@ -51,19 +52,22 @@ namespace DotnetStudies.Controllers
             return CreatedAtAction(nameof(GetTodoItem), new {id = item.Id}, item);
         }
 
-        /* [HttpPut("{id}")] */
-        /* public async Task<IActionResult> PutTodoItem(long id, TodoItem item) */
-        /* { */
-        /*     if (id != item.Id) */
-        /*     { */
-        /*         return BadRequest(); */
-        /*     } */
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> PatchTodoItem(long id,
+                [FromBody] JsonPatchDocument<TodoItem> patchDocument)
+        {
+            var todoItem = await todoService.GetTodoItem(id);
 
-        /*     context.Entry(item).State = EntityState.Modified; */
-        /*     await context.SaveChangesAsync(); */
+            if (todoItem == null)
+            {
+                return NotFound();
+            }
 
-        /*     return NoContent(); */
-        /* } */
+            patchDocument.ApplyTo(todoItem);
+            await todoService.UpdateTodoItem(todoItem);
+
+            return NoContent();
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodoItem(long id)

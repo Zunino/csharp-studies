@@ -10,5 +10,6 @@ namespace DotnetStudies.Models
         Task<TodoItem> GetTodoItem(long id);
         Task AddTodoItem(TodoItem todoItem);
         Task RemoveTodoItem(long id);
+        Task UpdateTodoItem(TodoItem todoItem);
     }
 }

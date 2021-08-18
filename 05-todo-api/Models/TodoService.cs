@@ -23,10 +23,10 @@ namespace DotnetStudies.Models
         }
 
         public async Task<IEnumerable<TodoItem>> GetTodoItems() =>
-            await todoContext.TodoItems.ToListAsync();
+            await todoContext.TodoItems.AsNoTracking().ToListAsync();
 
         public async Task<IEnumerable<TodoItem>> GetPendingTodoItems() =>
-            await todoContext.TodoItems.Where(i => i.IsComplete == false).ToListAsync();
+            await todoContext.TodoItems.AsNoTracking().Where(i => i.IsComplete == false).ToListAsync();
 
         public async Task<TodoItem> GetTodoItem(long id) =>
             await todoContext.TodoItems.FindAsync(id);
@@ -45,6 +45,11 @@ namespace DotnetStudies.Models
                 return;
             }
             todoContext.Remove(item);
+            await todoContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateTodoItem(TodoItem todoItem)
+        {
             await todoContext.SaveChangesAsync();
         }
     }
