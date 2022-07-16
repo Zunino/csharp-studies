@@ -29,10 +29,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddSingleton<ITimeLogger, TimeLogger>();
-builder.Services.AddSingleton<INameLogger, NameLogger>();
-builder.Services.AddHostedService<TimeLoggerBackgroundService>();
-builder.Services.AddHostedService<NameLoggerHostedService>();
+builder.Services.AddHostedService<TimeLoggerService>();
+builder.Services.AddHostedService<NameLoggerService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

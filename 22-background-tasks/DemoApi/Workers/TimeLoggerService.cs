@@ -1,15 +1,15 @@
 namespace DemoApi.Workers
 {
-    public class TimeLogger : ITimeLogger
+    public class TimeLoggerService : BackgroundService
     {
-        private readonly ILogger<TimeLogger> logger;
+        private readonly ILogger<TimeLoggerService> logger;
 
-        public TimeLogger(ILogger<TimeLogger> logger)
+        public TimeLoggerService(ILogger<TimeLoggerService> logger)
         {
             this.logger = logger;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
