@@ -24,6 +24,8 @@ Andre Zunino <neyzunino@gmail.com>
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
+Console.WriteLine($"==> Environment set to: {app.Environment.EnvironmentName}");
+
 app.MapGet("/", (IConfiguration configuration) =>
 {
     var title = configuration["ApplicationTitle"];
